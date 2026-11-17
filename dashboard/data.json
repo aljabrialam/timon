@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-11-17T08:24:21.587142+00:00",
+  "generated_at": "2026-11-17T08:52:32.401014+00:00",
   "session": {
-    "et": "2026-11-17 03:24 ET",
-    "sgt": "2026-11-17 16:24 SGT",
+    "et": "2026-11-17 03:52 ET",
+    "sgt": "2026-11-17 16:52 SGT",
     "trading_day": true,
     "session": "CLOSED",
     "regular_close_et": "16:00",
@@ -47,6 +47,8 @@
       "RISK_OFF": 30,
       "CHOP": 20
     },
+    "daily_loss_halt_pct": 1.5,
+    "drawdown_flatten_pct": 4.0,
     "stage": 1
   },
   "universe": [

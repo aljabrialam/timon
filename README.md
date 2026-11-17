@@ -127,7 +127,7 @@ All of these live in `config/risk_limits.yaml` and are enforced in code, not in 
 | Trading-scope reads | **blocked**: connector authorised for market data only | `sim_trade_cash_info` |
 | First paper trade | **not placed** — the account guard blocks while `competition_account_id` is empty | `python -m timon plan` |
 | Qoder Cloud Agents, schedule, dashboard deploy | **pending** | — |
-| Dashboard build | **verified locally**, desktop + 375/320 px | `python3 scripts/export_dashboard.py` then open `dashboard/index.html` |
+| Dashboard build | **verified locally**, 1440 px desktop + 315 px mobile | `python3 scripts/export_dashboard.py` then open `dashboard/index.html` |
 
 A test suite passing is evidence about arithmetic, not about a strategy. None of this has been evaluated out of sample, because it has not traded yet.
 
@@ -161,6 +161,8 @@ python3 -m http.server 8000 -d dashboard                         # → http://lo
 The export needs `pyyaml`, which the project venv already has (the macOS system `python3` does not).
 
 The export computes the equity curve from closed-trade P&L in `logs/decisions.jsonl`, reads the kill-switch state and the current plan, and writes nothing back into `state/` or `logs/`. Empty ledger in, honest empty states out.
+
+The page is deliberately quiet: a light lavender canvas, a floating shell, rounded white cards, pill status tags, and one steel-blue equity series drawn as stems and dots with a floating value chip. Budget meters are hatched ticks, not progress bars. It has three honest states, disarmed, empty ledger, and populated, and the layout is checked at 1440 px and 315 px.
 
 Deploying is one command against a static directory. `vercel.json` sets `framework: null`, points `outputDirectory` at `dashboard/`, and marks `data.json` no-cache so a fresh export is never stale. `.vercelignore` keeps the Python tree and virtualenvs out of the upload.
 

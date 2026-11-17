@@ -115,6 +115,8 @@ def build_payload(snapshot_path: Path | None, now: datetime) -> dict:
             "eod_flatten_et": limits["strategy"]["eod_flatten_et"],
             "target_r": limits["strategy"]["target_r"],
             "gross_cap_pct": limits["exposure"]["gross_cap_pct"],
+            "daily_loss_halt_pct": limits["kill_switch"]["daily_loss_halt_pct"],
+            "drawdown_flatten_pct": limits["kill_switch"]["drawdown_flatten_pct"],
             "stage": limits["autonomy"]["stage"],
         },
         "universe": limits["universe"]["symbols"],
