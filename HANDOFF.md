@@ -4,7 +4,7 @@
 > decisions, skills, status, next steps. Detailed plan: `TIMON.md`. Agent prompts: `AGENTS.md`.
 > **Update sections 4, 6, 12 and 14 at the end of every session** using prompt 0.3.
 
-**Last updated:** 2026-11-17 14:29 SGT · **By:** Qoder (session 2) · **Repo rev:** see `git log -1`
+**Last updated:** 2026-11-17 14:40 SGT · **By:** Qoder (session 2) · **Repo rev:** see `git log -1`
 
 ---
 
@@ -91,10 +91,10 @@ and skip runs when flat with no signal (pre-check `python -m timon session`).
 | Moomoo MCP tool names | Partial | 104 `moomoo_*` tools live in Qoder; `quote_stock_quote` validated (US.AAPL 352.78). Full param catalogue = step 4 |
 | GitHub remote | **Created** | https://github.com/aljabrialam/timon (public; no LICENSE file yet) |
 | Qoder Cloud Agents plugin | Installed v1.3.0 | official (1 skill + 1 MCP server); runtime-ready, tools appear after session reload |
-| QCA vault / skills / agents / template | Not started | Qoder |
-| Slack bot | Not started | Qoder |
+| QCA vault / skills / agents / template | Partial | env `timon-env` + smoke-test template "Timón Slack test" created via MCP. Vault, skill upload and Slack channel have no MCP tools, so they're console-only. Forward sessions need an identity, which comes from channel pairing |
+| Slack bot | Waiting on user | attach to template "Timón Slack test" in console (Channels → Slack → Create Bot, Pairing mode) |
 | Schedule | Not started | Qoder |
-| Dashboard | Not started | scaffold in workspace, Vercel deploy |
+| Dashboard | Not started | `dashboard/` holds only `.gitkeep`; scaffold in workspace, Vercel deploy |
 | Deck / report | Not started | Qoder-generated (required) |
 | Meta VR competition | Due 18 Nov | separate project; protect time |
 
@@ -225,9 +225,9 @@ Cycle: researcher → snapshot → `timon plan` → auditor gates → executor (
 | Moomoo MCP tools | 104 live (`moomoo_*`); `quote_stock_quote(code_list)` verified; full catalogue pending |
 | Qoder Cloud Agents plugin | v1.3.0 installed (1 skill + 1 MCP server); tools after reload |
 | GitHub repo | https://github.com/aljabrialam/timon (public) |
-| QCA environment ID | — |
-| QCA vault ID | — |
-| QCA template ID | — |
+| QCA environment ID | `env_00vqt8hs2g1z40eo86h8` (`timon-env`, cloud, pip pyyaml) |
+| QCA vault ID | — (vault creation is console-only; no MCP tool) |
+| QCA template ID | `tmpl_f22e230a130ed919d2aecd5e` "Timón Slack test" (model auto, no tools, no MCP, no trading). Real Timón template not created yet |
 | QCA agent IDs + versions | see AGENTS.md |
 | Slack workspace / channel | — |
 | Schedule ID | — |
@@ -251,3 +251,4 @@ Cycle: researcher → snapshot → `timon plan` → auditor gates → executor (
 | 17 Nov 13:00–14:00 | Workspace | Researched all competition links + docs. Built TIMON.md, engine (43 tests), 4 skills, AGENTS.md, README, HANDOFF. Local git commit. | 0 (Qoder) |
 | 17 Nov 14:05–14:20 | Qoder | Step 2: connector verified (AAPL 352.78), Cloud Agents plugin v1.3.0 installed; moomoo-skill install fails verification; 43 tests re-run green. | — |
 | 17 Nov 14:20–14:29 | Qoder | Step 3 partially: account list read, trade scopes blocked. Repo published to GitHub (public) with a valora-style README and logo mark; `pip install -e` fixed; commit emails rewritten to the GitHub noreply address. | — |
+| 17 Nov 14:30–14:40 | Qoder | QCA read: workspace empty. Created env `timon-env` and safe template "Timón Slack test" for the step 8 smoke test. Slack attach + pairing pending user (tokens entered in console only). | ~0 (no sessions run) |
