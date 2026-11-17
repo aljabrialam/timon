@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 72" width="210" height="72" role="img" aria-label="Timón">
+  <g fill="none" stroke="#14161A" stroke-width="3" stroke-linecap="round">
+    <circle cx="36" cy="36" r="17"/>
+    <circle cx="36" cy="36" r="5.5" stroke="#1F6C5A"/>
+    <line x1="53" y1="36" x2="62" y2="36"/>
+    <line x1="19" y1="36" x2="10" y2="36"/>
+    <line x1="36" y1="19" x2="36" y2="10"/>
+    <line x1="36" y1="53" x2="36" y2="62"/>
+    <line x1="48.02" y1="23.98" x2="54.38" y2="17.62"/>
+    <line x1="23.98" y1="48.02" x2="17.62" y2="54.38"/>
+    <line x1="48.02" y1="48.02" x2="54.38" y2="54.38"/>
+    <line x1="23.98" y1="23.98" x2="17.62" y2="17.62"/>
+  </g>
+  <text x="76" y="47" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="33" font-weight="600" letter-spacing="-0.6" fill="#14161A">Timón</text>
+</svg>
