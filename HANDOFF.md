@@ -92,7 +92,7 @@ and skip runs when flat with no signal (pre-check `python -m timon session`).
 | GitHub remote | **Created** | https://github.com/aljabrialam/timon (public; no LICENSE file yet) |
 | Qoder Cloud Agents plugin | Installed v1.3.0 | official (1 skill + 1 MCP server); runtime-ready, tools appear after session reload |
 | QCA vault / skills / agents / template | Partial | env `timon-env` + smoke-test template "Timón Slack test" created via MCP. Vault, skill upload and Slack channel have no MCP tools, so they're console-only. Forward sessions need an identity, which comes from channel pairing |
-| Slack bot | **Verified locally** | Bolt Python app `A0CHXMAG9M5` (team `T0CJC214F5Y`), project `../timon-slack`. `@Timon Say hello` replied in `#timon-test` 15:37 SGT. Runs only while `slack run` is up |
+| Slack bot | **Verified locally** | Bolt Python app `A0CHXMAG9M5` (team `T0CJC214F5Y`), code in `slack/`. `hello` and `status` (session, kill switch, ledger) reply; status runs the engine read-only. Runs only while `slack run` is up |
 | Schedule | Not started | Qoder |
 | Dashboard | Not started | `dashboard/` holds only `.gitkeep`; scaffold in workspace, Vercel deploy |
 | Deck / report | Not started | Qoder-generated (required) |
@@ -120,7 +120,7 @@ and skip runs when flat with no signal (pre-check `python -m timon session`).
 - [ ] 5. **Qoder:** test trade + close in a **non-competition** paper account; confirm supported order types (limit/market; stops?).
 - [x] 6. GitHub repo created: https://github.com/aljabrialam/timon (public, topics set). Commit emails rewritten to `8343612+aljabrialam@users.noreply.github.com`, because pushes were rejected by the account's email-privacy rule.
 - [ ] 7. **QCA console (Forward Mode):** vault `moomoo-mcp` (MCP OAuth, `https://mcp.moomoo.com/mcp`); upload `dist/*.zip` + moomoo skills (one zip each); create 4 agents from AGENTS.md; lock versions; template with Schedule + Collaboration enabled; record IDs.
-- [x] 8. Slack bot done as a **local Bolt Python app** (Slack CLI flow): app `A0CHXMAG9M5`, Socket Mode, scopes `app_mentions:read, chat:write, channels:history, groups:history, im:history, mpim:history`, events `app_mention, message.im`. Verified reply in `#timon-test`. **Not** the QCA channel — attaching QCA's Slack channel to the same app would double-answer; pick one. Still to do: host it (Railway or `slack deploy`) and wire it to the engine.
+- [x] 8. Slack bot done as a **local Bolt Python app** (Slack CLI flow): app `A0CHXMAG9M5`, Socket Mode, scopes `app_mentions:read, chat:write, channels:history, groups:history, im:history, mpim:history`, events `app_mention, message.im`. Verified reply in `#timon-test`. **Not** the QCA channel — attaching QCA's Slack channel to the same app would double-answer; pick one. Still to do: host it (Railway or `slack deploy`). Wired: `hello`, `status`; no order path.
 - [ ] 9. One manual cycle in QCA during US hours (stage 1). Measure credits → section 3 rule.
 - [ ] 10. Create schedule **from Slack** (prompt in TIMON.md §9.4). Ends 27 Nov 12:45 ET; skip 26 Nov.
 - [ ] 11. Dashboard: scaffold in workspace (Vite + React + TS, Lightweight Charts, motion.dev) → deploy Vercel.
@@ -230,7 +230,7 @@ Cycle: researcher → snapshot → `timon plan` → auditor gates → executor (
 | QCA template ID | `tmpl_f22e230a130ed919d2aecd5e` "Timón Slack test" (model auto, no tools, no MCP, no trading). Real Timón template not created yet |
 | QCA agent IDs + versions | see AGENTS.md |
 | Slack app | `A0CHXMAG9M5` "Timon", workspace `moomootrading` = `T0CJC214F5Y`, user `U0CJFU5J420`, test channel `#timon-test` |
-| Slack project | `../timon-slack` (Bolt Python, blank template). Run: `SSL_CERT_FILE=$PWD/.venv/lib/python3.14/site-packages/certifi/cacert.pem slack run --app=A0CHXMAG9M5 --org-workspace-grant=all` |
+| Slack project | `slack/` (Bolt Python). Run from that dir: `SSL_CERT_FILE=$PWD/.venv/lib/python3.14/site-packages/certifi/cacert.pem slack run --app=A0CHXMAG9M5 --org-workspace-grant=all` |
 | Schedule ID | — |
 | Credits per cycle | — |
 | Dashboard URL | — |
