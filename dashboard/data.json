@@ -1,0 +1,93 @@
+{
+  "generated_at": "2026-11-17T08:04:10.341639+00:00",
+  "session": {
+    "et": "2026-11-17 03:04 ET",
+    "sgt": "2026-11-17 16:04 SGT",
+    "trading_day": true,
+    "session": "CLOSED",
+    "regular_close_et": "16:00",
+    "can_enter": false,
+    "must_flatten": false,
+    "final_flatten_passed": false,
+    "reason": "CLOSED session \u2014 Tim\u00f3n trades regular hours only"
+  },
+  "kill": null,
+  "regime": null,
+  "plan": null,
+  "account": {
+    "configured": false,
+    "id": "",
+    "name": "Moomoo x Qoder AI Paper Trading Agent Challenge",
+    "env": "SIMULATE"
+  },
+  "state": {
+    "account_id": "",
+    "trd_env": "SIMULATE",
+    "equity": 100000.0,
+    "start_of_day_equity": 100000.0,
+    "peak_equity": 100000.0,
+    "positions": [],
+    "orders_today": 0,
+    "entries_today": 0,
+    "consecutive_losses": 0,
+    "last_check": null,
+    "halted_today": false,
+    "disabled": false
+  },
+  "limits": {
+    "risk_per_trade_pct": 0.5,
+    "max_position_notional_pct": 20,
+    "max_orders_per_day": 20,
+    "max_new_entries_per_day": 4,
+    "entry_cutoff_et": "13:00",
+    "eod_flatten_et": "15:50",
+    "target_r": 2.0,
+    "gross_cap_pct": {
+      "RISK_ON": 80,
+      "RISK_OFF": 30,
+      "CHOP": 20
+    },
+    "stage": 1
+  },
+  "universe": [
+    "SPY",
+    "QQQ",
+    "IWM",
+    "XLK",
+    "XLF",
+    "XLE",
+    "XLV",
+    "XLY",
+    "SMH"
+  ],
+  "metrics": {
+    "trades": 0,
+    "win_rate": 0.0,
+    "avg_win": 0.0,
+    "avg_loss": 0.0,
+    "expectancy_usd": 0.0,
+    "avg_r": null,
+    "total_pnl": 0,
+    "verdicts": {},
+    "sharpe_annualised": null
+  },
+  "equity": {
+    "start_equity": 100000.0,
+    "points": [
+      {
+        "date": "2026-11-17",
+        "equity": 100000.0
+      }
+    ],
+    "daily_returns_pct": [],
+    "max_drawdown_pct": 0.0,
+    "current_drawdown_pct": 0.0
+  },
+  "ledger": {
+    "ok": true,
+    "entries": 0,
+    "broken_at": null
+  },
+  "verdicts": [],
+  "recent": []
+}

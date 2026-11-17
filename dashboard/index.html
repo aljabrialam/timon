@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Timón · paper trading</title>
+  <meta name="description" content="Deterministic risk engine and AI paper-trading agent team. Every order traces back to a logged verdict.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23d7a24a' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23d7a24a'/%3E%3Cg stroke='%23d7a24a' stroke-width='2'%3E%3Cpath d='M16 3v6M16 23v6M3 16h6M23 16h6'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="16" cy="16" r="4" fill="currentColor"/>
+        <g stroke="currentColor" stroke-width="2">
+          <path d="M16 3v6M16 23v6M3 16h6M23 16h6"/>
+        </g>
+      </svg>
+      <div>
+        <h1>Timón</h1>
+        <p class="tagline">deterministic risk engine · paper only · SIMULATE</p>
+      </div>
+    </div>
+    <div class="top-right">
+      <span class="stamp" id="generated">—</span>
+      <button class="refresh" id="refresh" type="button">Refresh</button>
+    </div>
+  </header>
+
+  <div class="banner" id="disarmed" hidden>
+    <strong>Executor disarmed.</strong>
+    <span id="disarmed-reason"></span>
+  </div>
+
+  <section class="status" aria-label="Cycle status">
+    <article class="tile">
+      <h2>Session</h2>
+      <p class="value" id="session-name">—</p>
+      <p class="sub" id="session-clock">—</p>
+      <p class="sub" id="session-rules">—</p>
+    </article>
+    <article class="tile">
+      <h2>Kill switch</h2>
+      <p class="value" id="kill-action">—</p>
+      <p class="sub" id="kill-reasons">—</p>
+      <p class="sub" id="kill-levels">—</p>
+    </article>
+    <article class="tile">
+      <h2>Regime</h2>
+      <p class="value" id="regime-name">—</p>
+      <p class="sub" id="regime-evidence">—</p>
+    </article>
+    <article class="tile">
+      <h2>Decision ledger</h2>
+      <p class="value" id="ledger-state">—</p>
+      <p class="sub" id="ledger-count">—</p>
+      <p class="sub" id="ledger-hash">sha256 chained</p>
+    </article>
+  </section>
+
+  <section class="kpis" aria-label="Performance">
+    <div class="kpi"><h3>Equity</h3><p id="kpi-equity">—</p><span id="kpi-equity-sub">—</span></div>
+    <div class="kpi"><h3>Day P&amp;L</h3><p id="kpi-day">—</p><span id="kpi-day-sub">—</span></div>
+    <div class="kpi"><h3>Max drawdown</h3><p id="kpi-dd">—</p><span>from peak equity</span></div>
+    <div class="kpi"><h3>Trades</h3><p id="kpi-trades">—</p><span id="kpi-winrate">—</span></div>
+    <div class="kpi"><h3>Expectancy</h3><p id="kpi-exp">—</p><span id="kpi-avgwin">—</span></div>
+    <div class="kpi"><h3>Avg R</h3><p id="kpi-r">—</p><span id="kpi-sharpe">—</span></div>
+  </section>
+
+  <section class="panel chart-panel" aria-labelledby="chart-title">
+    <div class="panel-head">
+      <h2 id="chart-title">Equity</h2>
+      <p class="panel-note" id="chart-note"></p>
+    </div>
+    <div id="chart" class="chart"></div>
+  </section>
+
+  <div class="grid">
+    <section class="panel" aria-labelledby="positions-title">
+      <div class="panel-head">
+        <h2 id="positions-title">Open positions</h2>
+        <p class="panel-note" id="positions-note"></p>
+      </div>
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Symbol</th><th scope="col" class="num">Qty</th><th scope="col" class="num">Notional</th></tr></thead>
+        <tbody id="positions"></tbody>
+      </table>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="proposals-title">
+      <div class="panel-head">
+        <h2 id="proposals-title">Shadow proposals</h2>
+        <p class="panel-note">baseline record, never executed</p>
+      </div>
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Symbol</th><th scope="col" class="num">Entry</th><th scope="col" class="num">Stop</th><th scope="col" class="num">Target</th></tr></thead>
+        <tbody id="proposals"></tbody>
+      </table>
+      </div>
+    </section>
+  </div>
+
+  <section class="panel" aria-labelledby="verdicts-title">
+    <div class="panel-head">
+      <h2 id="verdicts-title">Risk verdicts</h2>
+      <p class="panel-note">may tighten, never loosen</p>
+    </div>
+    <div class="table-wrap">
+    <table class="wide">
+      <thead>
+        <tr><th scope="col">Time</th><th scope="col">Symbol</th><th scope="col">Verdict</th><th scope="col" class="num">Qty</th><th scope="col" class="num">Risk</th><th scope="col">Failed checks</th></tr>
+      </thead>
+      <tbody id="verdicts"></tbody>
+    </table>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="panel" aria-labelledby="limits-title">
+      <div class="panel-head"><h2 id="limits-title">Limits in force</h2></div>
+      <dl class="limits" id="limits"></dl>
+    </section>
+
+    <section class="panel" aria-labelledby="recent-title">
+      <div class="panel-head"><h2 id="recent-title">Ledger tail</h2></div>
+      <ol class="log" id="recent"></ol>
+    </section>
+  </div>
+
+  <footer>
+    <p>Every entry is a hash-chained record. <span id="footer-account">—</span></p>
+    <p class="muted">No live account. No order path from this page.</p>
+  </footer>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>

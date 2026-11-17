@@ -15,7 +15,7 @@
 
 **Timón is a paper-trading agent team where the language models gather facts and the arithmetic decides.** A researcher reads the market through Moomoo's MCP, a deterministic Python engine turns that snapshot into a plan, a risk auditor that can only tighten the plan gates it, and an executor places the orders. Every run ends as a git commit and a hash-chained ledger entry, so every position can be blamed back to the reason it was opened.
 
-> **Status (17 Nov 2026): engine ready, nothing has traded.** The engine, the risk gate, the kill switch and the ledger are built and covered by 43 tests; the Moomoo connector is verified against a live quote. Not built yet: the competition account is unconfirmed, so the account guard blocks every proposal; Qoder Cloud Agents deployment, Slack approvals, the schedule and the dashboard are all pending. No order has been placed.
+> **Status (17 Nov 2026): engine and dashboard ready, nothing has traded.** The engine, the risk gate, the kill switch and the ledger are built and covered by 43 tests; the Moomoo connector is verified against a live quote; the read-only Slack bot answers `status`; the dashboard renders the ledger and is ready to deploy. Not built yet: the competition account is unconfirmed, so the account guard blocks every proposal; Qoder Cloud Agents deployment, Slack approvals and the schedule are pending. No order has been placed.
 
 ---
 
@@ -124,7 +124,8 @@ All of these live in `config/risk_limits.yaml` and are enforced in code, not in 
 | Moomoo paper accounts | account list reads (7 accounts, US `5822597`) | `sim_trade_account_list` |
 | Trading-scope reads | **blocked**: connector authorised for market data only | `sim_trade_cash_info` |
 | First paper trade | **not placed** — the account guard blocks while `competition_account_id` is empty | `python -m timon plan` |
-| Qoder Cloud Agents, Slack, schedule, dashboard | **not built** | — |
+| Qoder Cloud Agents, schedule, dashboard deploy | **pending** | — |
+| Dashboard build | **verified locally**, desktop + 375/320 px | `python3 scripts/export_dashboard.py` then open `dashboard/index.html` |
 
 A test suite passing is evidence about arithmetic, not about a strategy. None of this has been evaluated out of sample, because it has not traded yet.
 
@@ -143,6 +144,29 @@ python3 scripts/package_skills.py                   # dist/*.zip for Cloud Agent
 
 With an empty `competition_account_id` in `config/account.yaml` every proposal comes back BLOCKED. That is the point: the system fails closed until the competition account is confirmed and a test round trip has been done somewhere harmless.
 
+## Dashboard
+
+`dashboard/` is a static site: HTML, one CSS file, one ES module, and a hand-rolled SVG chart. No build step, no npm, no framework, no broker credentials in the browser. It reads one file, `dashboard/data.json`, which is generated from the repo:
+
+```bash
+.venv/bin/python scripts/export_dashboard.py                     # ledger + state → dashboard/data.json
+.venv/bin/python scripts/export_dashboard.py --snapshot state/snapshot.json
+python3 -m http.server 8000 -d dashboard                         # → http://localhost:8000
+```
+
+The export needs `pyyaml`, which the project venv already has (the macOS system `python3` does not).
+
+The export computes the equity curve from closed-trade P&L in `logs/decisions.jsonl`, reads the kill-switch state and the current plan, and writes nothing back into `state/` or `logs/`. Empty ledger in, honest empty states out.
+
+Deploying is one command against a static directory. `vercel.json` points `outputDirectory` at `dashboard/` and marks `data.json` no-cache so a fresh export is never stale:
+
+```bash
+vercel login
+vercel --prod
+```
+
+The refresh path is git: the executor commits a run, CI or a scheduled export regenerates `data.json`, Vercel redeploys. The page also carries a Refresh button for the local case.
+
 ## Layout
 
 ```
@@ -152,9 +176,9 @@ skills/           coordinator · researcher · risk-auditor · executor, one SKI
 state/            state.json (persistent), snapshot.json + plan.json (per run)
 logs/             decisions.jsonl — append-only, hash-chained
 examples/         synthetic snapshot generator and sample
-scripts/          package_skills.py
+scripts/          export_dashboard.py (repo → dashboard/data.json) · package_skills.py
 tests/            pytest suite
-dashboard/        Vite + React app (to build)
+dashboard/        static dashboard: index.html · styles.css · app.js · data.json (generated)
 docs/brand/       logo
 ```
 
