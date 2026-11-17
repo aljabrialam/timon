@@ -1,0 +1,6 @@
+# Fill in from Qoder: "List my paper trading accounts and confirm you can access
+# the Qoder AI Agent Trading Challenge account." Never a live account.
+competition_account_id: ""        # REQUIRED before any order; empty = executor refuses
+competition_account_name: "Moomoo x Qoder AI Paper Trading Agent Challenge"
+trd_env: SIMULATE                 # must stay SIMULATE
+market: US

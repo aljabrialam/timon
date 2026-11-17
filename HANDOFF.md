@@ -1,0 +1,247 @@
+# HANDOFF — Timón (Moomoo x Qoder AI Trading Agent Challenge)
+
+> **Read this first in every session** (planning workspace or Qoder). It is self-contained: rules, platform facts,
+> decisions, skills, status, next steps. Detailed plan: `TIMON.md`. Agent prompts: `AGENTS.md`.
+> **Update sections 4, 6, 12 and 14 at the end of every session** using prompt 0.3.
+
+**Last updated:** 2026-11-17 14:00 SGT · **By:** planning workspace (build session 1) · **Repo rev:** see `git log -1`
+
+---
+
+## 0. Prompts (copy-paste)
+
+### 0.1 Resume in the planning workspace
+```
+Resume Timón. Read HANDOFF.md in the attached repo/zip first (it is the source of truth),
+then TIMON.md and AGENTS.md only if a task needs them. Continue from section 6 "Next".
+Keep my preferences in section 2. At the end, update HANDOFF.md (sections 4, 6, 12, 14)
+and give me the updated repo zip.
+```
+
+### 0.2 Resume in Qoder (token-light)
+```
+Read HANDOFF.md only. Do step <N> from section 6 "Next". Do not read other docs unless the
+step needs them. Do not change config/risk_limits.yaml without asking me. Never place an
+order in the competition account until the account guard and a non-competition test trade
+have both passed. When done, run prompt 0.3.
+```
+
+### 0.3 Update the handover (end of every session — planning workspace or Qoder)
+```
+Update HANDOFF.md before we stop:
+1. Section 4 Status: change only rows that changed.
+2. Section 6 Next: tick done items, add new ones in order.
+3. Section 12 Environment facts: add any IDs/URLs/tool names discovered (never tokens or passwords).
+4. Section 14 Session log: one line — when (SGT), who (Workspace/Qoder), what changed, credits used.
+5. Update "Last updated" at the top.
+Keep it concise. Then: git add -A && git commit -m "handoff: <one-line summary>" && git push (if a remote exists).
+```
+
+---
+
+## 1. What we're building (30 seconds)
+An AI trading team on **Qoder Cloud Agents** that trades **US ETFs** in the **Moomoo competition paper account**.
+- Researcher agent fetches data (Moomoo MCP) → deterministic **Python engine** (`timon/`) decides →
+  Risk Auditor gates → Executor places orders → every run **commits to git** ("git for trading").
+- Humans: **Slack** (alerts, approvals, daily report). Viewers: **dashboard on Vercel** reading the git repo.
+- Pitch: *"Git for trading: every decision is a commit, every rule change is a diff, and you can blame any
+  position back to the reason it was opened."*
+- Not a mobile app. A scheduled cloud bot + a web dashboard + Slack.
+
+## 2. Owner and preferences
+- Aljabri Alam, Singapore (SGT, UTC+8). Individual entry. GitHub: `aljabrialam`.
+- Wants: copy-paste-ready outputs, Mermaid diagrams, iterative refinement (don't rebuild from scratch).
+- UI: Apple HIG, motion.dev for animation, no emojis, no generic "AI slop" look.
+- Token budget is limited in Qoder → keep Qoder prompts short; do heavy thinking/writing in the planning workspace.
+
+## 3. Qoder credit budget
+| Pool | Credits | Expires |
+|---|---|---|
+| Plan (Pro, monthly) | 2,000 | resets 18 Dec 2026 |
+| Add-on: purchased | 1,500 | 17 Dec 2026 |
+| Add-on: bonus | 100 | 17 Dec 2026 |
+| **Total** | **3,600** | (as of 17 Nov, 0 used) |
+
+Allocation (adjust after measuring):
+| Use | Budget |
+|---|---|
+| Setup + build in Qoder Desktop (connectors, skills, agents, fixes) | 600 |
+| Live cloud runs 18–27 Nov | 2,000 |
+| Dashboard polish + deploy | 300 |
+| Deck / report (must be Qoder-generated) | 300 |
+| Reserve | 400 |
+
+**Rule:** after the first manual cycle, record its credit cost in section 12. Runs needed ≈ 75/day at 5-min
+checks × 7.5 days ≈ 560. If cost × runs > 2,000: move to 10- or 15-min checks **and** set
+`kill_switch.missed_check_minutes` to 2.5× the interval, use lighter models for Researcher/Executor,
+and skip runs when flat with no signal (pre-check `python -m timon session`).
+50%-off top-ups: claims.sg-cloudace.com (max 3, once/day).
+
+## 4. Status
+| Area | State | Notes |
+|---|---|---|
+| Research (all competition links + docs) | Done | facts in sections 7–8 |
+| TIMON.md plan | v0.4 | |
+| Engine `timon/` | Done, **43 tests pass** | session/calendar, regime, ORB, risk gate, kill switch, exits, hash-chained ledger, metrics, CLI |
+| Repo skills (4) | Drafted | tool names TBD; zips via `scripts/package_skills.py` |
+| AGENTS.md | Drafted | not deployed |
+| Local git | 1 commit on `main` | no remote yet |
+| Competition account ID | **Missing** | engine blocks all orders until set |
+| Moomoo MCP tool names | **Unknown** | |
+| GitHub remote | Not created | |
+| QCA vault / skills / agents / template | Not started | Qoder |
+| Slack bot | Not started | Qoder |
+| Schedule | Not started | Qoder |
+| Dashboard | Not started | scaffold in workspace, Vercel deploy |
+| Deck / report | Not started | Qoder-generated (required) |
+| Meta VR competition | Due 18 Nov | separate project; protect time |
+
+## 5. Decisions (don't relitigate without a reason)
+- **Strategy:** regime-filtered **opening-range breakout** (first 30 min) on SPY, QQQ, IWM, XLK, XLF, XLE, XLV, XLY, SMH. Long-only by default. **Flat every day** by 15:50 ET.
+- **Regime:** RISK_ON (SPY > SMA20 > SMA50, VIX < 25, breadth ≥ 50%), RISK_OFF (SPY < SMA50 or VIX ≥ 25), else CHOP (half size). Missing data → CHOP.
+- **Engine decides, LLMs don't:** sizing, verdicts and kill switch are Python with tests.
+- **No resting stop orders in the paper API** → stops checked every cycle; missed check → flatten; 2R take-profit as resting limit.
+- **Risk:** 0.5% risk/trade · 20% notional cap · gap rule 3× stop ≤ 1.5% · gross 80/30/20% by regime · ≤ 4 entries/day · ≤ 20 orders/day · −1.5% day → halt · −4% from peak → flatten + disable · 4 losses → half size · quote > 120 s old → hold.
+- **Earned autonomy:** stage 1 (every order to Slack) 18–20 Nov → stage 2 (≤ 0.25% risk auto) 23–24 → stage 3 (auto in limits) 25–27. Now **stage 1**.
+- **Baselines:** SPY buy-and-hold + shadow ORB (no regime filter), logged only.
+- **Tune 18–21 Nov, freeze config from 23 Nov** (tag `config-frozen`) for out-of-sample evaluation.
+- **Git for trading:** every run commits; ledger `logs/decisions.jsonl` is hash-chained (`python -m timon verify`).
+- **Slack** only (Telegram isn't a QCA channel; pitch says adapter-ready).
+- **Dashboard on Vercel**, reads git repo only (no broker creds). Optional Qoder Sites mirror.
+- **Build split:** logic/tests/docs in the planning workspace; all platform work (MCP, QCA, Slack, schedule, deck) in Qoder so Qoder usage (30% of score) is real.
+
+## 6. Next (in order)
+- [ ] 1. **moomoo app:** confirm competition account appears (Discover → Paper Trade → Competition).
+- [ ] 2. **Qoder Desktop:** open repo; install moomoo OpenAPI connector (**Market Data only**), moomoo-skill, Qoder Cloud Agents plugin. Check: "What is the current price of US.AAPL?"
+- [ ] 3. **Qoder:** "List my paper trading accounts and confirm you can access the Qoder AI Agent Trading Challenge account." → ID into `config/account.yaml`, commit.
+- [ ] 4. **Qoder:** "What can I do with this MCP? List every tool name and its parameters." → paste into section 12; update researcher/executor skills with exact tool names.
+- [ ] 5. **Qoder:** test trade + close in a **non-competition** paper account; confirm supported order types (limit/market; stops?).
+- [ ] 6. Create GitHub repo `aljabrialam/timon` (public OK, no secrets), push.
+- [ ] 7. **QCA console (Forward Mode):** vault `moomoo-mcp` (MCP OAuth, `https://mcp.moomoo.com/mcp`); upload `dist/*.zip` + moomoo skills (one zip each); create 4 agents from AGENTS.md; lock versions; template with Schedule + Collaboration enabled; record IDs.
+- [ ] 8. Slack app (Socket Mode; App token `xapp-`, Bot token `xoxb-`) → template Channels → Slack → Create Bot, **Pairing mode**. Test: "@bot Say hello. Do not place any trades."
+- [ ] 9. One manual cycle in QCA during US hours (stage 1). Measure credits → section 3 rule.
+- [ ] 10. Create schedule **from Slack** (prompt in TIMON.md §9.4). Ends 27 Nov 12:45 ET; skip 26 Nov.
+- [ ] 11. Dashboard: scaffold in workspace (Vite + React + TS, Lightweight Charts, motion.dev) → deploy Vercel.
+- [ ] 12. 26 Nov (closed): audit logs, fix bugs. 28–29 Nov: report + Qoder-generated deck + demo video. Submit by 30 Nov 23:59 SGT.
+
+## 7. Competition facts
+**Scoring (provisional):** risk-adjusted return **25% (Sharpe)** · Qoder/QCA usage **30%** (multi-agent, automation, dashboards, reports, reusable skills) · strategy & risk design **30%** · reuse & docs **15%**. High return with high risk can score lower.
+
+**Timeline (SGT):** regular US session 22:30–05:00 · pre 17:00–22:30 · after 05:00–09:00.
+17–20 Nov full · 23–25 Nov full · **26 Nov closed** · **27 Nov half day (regular 22:30–02:00 Sat)** · submit **30 Nov 23:59** · finals 8 Dec.
+
+**T&Cs:** US stocks/ETFs/options only · price ≥ $1, mkt cap ≥ $500M · US$100k start · margin + shorts allowed (long 50/40%, short 60/50%; 4.8%/6.0% p.a. interest) · ≤ 200 executed orders/day · ≤ 100 positions · single stock ≤ 40% · fills volume-matched (qty > volume×20 → partial) · fees: $0.99/order + $0.000166/share sold (cap $8.30) · results at **regular close of final day**; after-hours on final day excluded · weekly returns Fri 10 PM ET · **no reset cards (disqualification)** · forced liquidation if liquidity < 0.
+
+**Must:** trade only in the competition account (Discover → Paper Trade → Competition) · use **both** Qoder Desktop and Cloud Agents · build with Qoder · SIMULATE only, never a live account · OAuth: grant Market Data (+ Watchlists) only.
+
+**Submit:** Qoder-generated deck/report (HTML or PPT) + runnable agent package; include strategy, risk limits, decision log, fills, results, what worked/failed/why. GitHub and public dashboard optional. Organisers see returns and credit usage directly.
+
+**Judges like (kickoff deck):** baseline · out-of-sample split · costs + partial fills · rejected/failed decisions logged · reproducible · earned autonomy (human → bounded → proven).
+
+## 8. Platform facts
+**Qoder Cloud Agents (QCA)**
+- Forward Mode recommended (templates, identities, schedules, channels). Managed mode = raw building blocks.
+- Container: Ubuntu 22.04, Python 3.12, Node 20, git. Storage ephemeral (may reset after 24 h idle) → **push every run**.
+- Multi-agent: coordinator + up to 20 child agents + 1 Advisor (advice only, no tools). Children share one sandbox → assign file ownership. Lock child versions (not `latest`). Tools need `agent_toolset_20260401`.
+- Schedules: cron (5-field, explicit IANA tz, e.g. `America/New_York`) / interval (`PT5M`) / once. Each run = new session (self-contained instructions). **Default concurrency 1 → overlapping runs skipped.** Natural-language default tz is Asia/Shanghai — always specify. Created in Slack → results post to Slack; API-created → need `sinks`.
+- Vault: MCP OAuth credential for `https://mcp.moomoo.com/mcp` (leave client creds empty → Connect → Moomoo consent). A session without the vault silently has no Moomoo tools.
+- GitHub: attach as session resource `github_repository` with fine-grained PAT (Contents R/W, Metadata R); token exposed as `GH_TOKEN`.
+- Skills: one zip per skill, one top-level folder = `name` in SKILL.md; frontmatter `name` (lowercase, ≤ 64) + `description` (≤ 5,120); ≤ 50 MB. Desktop skills don't carry to cloud.
+- Qoder Sites: free plan static only; sites invite-only by default.
+- Docs index: https://docs.qoder.com/llms.txt
+
+**Moomoo**
+- MCP: `https://mcp.moomoo.com/mcp`, OAuth 2.1, scopes `quote:read`, `quote:write`, `trade:read`, `trade:write`; access token ~2 h, auto-refresh; 14-day inactivity expiry.
+- 130+ tools, 20+ skills (news, sentiment, stock digest, technical/capital/derivatives anomaly, simulated trading, grid strategy). Tool list loads dynamically — ask the MCP.
+- **Paper API: limit + market orders only, no resting stops** (per Moomoo's example playbook). App has stop/trailing types; API does not (verify in step 5).
+- Paper prices = live moomoo prices. Pre/after-hours supported (limit orders only advised).
+- Skills repo: https://github.com/MoomooOpen/moomoo-agent-hub (packaging prompt in challenge handbook §4.2.1).
+
+**Moomoo briefing takeaways:** ship a simple baseline fast (ORB at 22:30 SGT) · isolate sessions · hard-code holiday flatten · edge = quantity × quality · expectancy > win rate · fixed % risk · "an alert is not a stop order" · "agents agreeing is not proof" · start with 2 agents, then scale.
+
+## 9. Skills inventory
+**Repo skills (ours, `skills/`, upload to QCA):**
+| Skill | Does | Credentials |
+|---|---|---|
+| `timon-coordinator` | runs one cycle, delegates, Slack summary | none |
+| `timon-researcher` | builds `state/snapshot.json` from Moomoo MCP; never trades | vault (read) |
+| `timon-risk-auditor` | runs `python -m timon plan`; can tighten, never loosen; escalations to Slack | none |
+| `timon-executor` | only order path; competition SIMULATE account; logs + git push | vault |
+
+**Platform skills (install in Qoder):** `moomoo-skill` (official, publisher moomoo) · Qoder Cloud Agents plugin (`qca` connector + `qoder-cloud-agents` skill, publisher Qoder).
+
+**Planning-workspace skills available for building (load when the task needs them):**
+| Skill | Use for |
+|---|---|
+| `paper-trading-journal` | journal/report format, trade review |
+| `trade-risk-management` | risk rule review, sizing sanity checks |
+| `technical-analysis-playbook` | ORB/regime rule refinement |
+| `tradingcalc` | exact risk/position/Sharpe math checks |
+| `frontend-design`, `ui-ux-pro-max`, `hig-compliance-auditor`, `dataviz` | dashboard (HIG, charts) |
+| `hackathon-demo-video`, `motion-reel` | demo video |
+| `pptx` / Slides | deck draft (final must be Qoder-generated) |
+| `engineering:code-review`, `engineering:testing-strategy` | engine review |
+
+## 10. Repo map and commands
+```
+timon/            engine: clock, indicators, regime, signals, risk, killswitch, journal, plan, cli
+config/           risk_limits.yaml · calendar.yaml · account.yaml (competition ID goes here)
+skills/           4 SKILL.md folders → dist/*.zip
+state/            state.json (persistent) · snapshot.json + plan.json (per run)
+logs/             decisions.jsonl (append-only, hash-chained)
+examples/         make_snapshot.py (synthetic snapshot = schema reference)
+scripts/          package_skills.py
+tests/            43 pytest tests
+dashboard/        (to build)
+```
+```bash
+pip install -e ".[dev]" && python -m pytest -q
+python -m timon session                         # SGT + ET, can_enter, must_flatten
+python -m timon plan state/snapshot.json        # full cycle plan; logs to ledger (--no-log to skip)
+python -m timon killswitch state/state.json
+python -m timon log fill fill.json              # types: order | fill | close | note | approval | error
+python -m timon verify                          # ledger integrity
+python -m timon metrics                         # trades, win rate, expectancy, avg R, verdicts, Sharpe
+python scripts/package_skills.py                # validate + zip skills
+```
+Cycle: researcher → snapshot → `timon plan` → auditor gates → executor (exits first, then entries, then 2R limit targets) → state.json → ledger → commit + push.
+
+## 11. Open questions
+- [ ] Exact Moomoo MCP tool names (accounts, positions, quotes, daily bars, intraday bars, place/modify/cancel, order status).
+- [ ] VIX via MCP? If not → regime stays CHOP (half size) until another source is added.
+- [ ] Competition account ID from MCP matches the app?
+- [ ] Credit cost per cycle → decides 5 vs 10/15-min interval.
+- [ ] Shorts in RISK_OFF: keep `allow_short: false` unless tested.
+- [ ] Order-types guide (moomoo-order-types-…qoder.website) is invite-only — read it after Qoder sign-in.
+
+## 12. Environment facts (fill in; never tokens/passwords)
+| Fact | Value |
+|---|---|
+| Competition account ID | — |
+| Non-competition test account ID | — |
+| Moomoo MCP tools | — |
+| GitHub repo | — |
+| QCA environment ID | — |
+| QCA vault ID | — |
+| QCA template ID | — |
+| QCA agent IDs + versions | see AGENTS.md |
+| Slack workspace / channel | — |
+| Schedule ID | — |
+| Credits per cycle | — |
+| Dashboard URL | — |
+
+## 13. Links
+- Challenge site (Handbook, T&Cs, FAQ, Disclaimer): https://moomoo-qoder-challenge-rgkelnyuzbm.qoder.website/
+- Qoder kickoff deck: https://ngynckpj.qwenwork.page/
+- Moomoo strategy briefing: https://moomoo-strategy-briefing-j692pppjg7l.qoder.website/
+- Forward Mode schedule guide: https://kgcedzh3.qwenwork.page/
+- Example dashboard: https://challenge-dashboard-j692pppjg7l.qoder.website/ · playbook: https://trading-playbook-j692pppjg7l.qoder.website/
+- Zoom recording: https://drive.google.com/file/d/1e0s5JcAhRr6TaHqrzfXBHQb8FZBbnbMq/view (not reviewed)
+- QCA docs: https://docs.qoder.com/cloud-agents/overview · console: https://qoder.com/cloud · PATs: https://qoder.com/cloud/pat-keys
+- Moomoo MCP docs: https://open.moomoo.com/mcp-docs/overview
+- Luma (submission link): https://luma.com/oezyv35j · Credits: https://claims.sg-cloudace.com/
+
+## 14. Session log
+| When (SGT) | Who | What changed | Credits used |
+|---|---|---|---|
+| 17 Nov 13:00–14:00 | Workspace | Researched all competition links + docs. Built TIMON.md, engine (43 tests), 4 skills, AGENTS.md, README, HANDOFF. Local git commit. | 0 (Qoder) |

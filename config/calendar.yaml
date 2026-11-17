@@ -1,0 +1,23 @@
+# Competition calendar. All times America/New_York unless noted.
+timezone: America/New_York
+window_start: "2026-11-17"
+window_end: "2026-11-27"
+trading_days:
+  - "2026-11-17"
+  - "2026-11-18"
+  - "2026-11-19"
+  - "2026-11-20"
+  - "2026-11-23"
+  - "2026-11-24"
+  - "2026-11-25"
+  - "2026-11-27"
+closed_days:
+  - "2026-11-26"   # Thanksgiving
+half_days:
+  "2026-11-27": "13:00"   # Black Friday early close (02:00 SGT Sat 28 Nov)
+sessions:
+  pre:     ["04:00", "09:30"]
+  regular: ["09:30", "16:00"]
+  after:   ["16:00", "20:00"]
+# Hard final flatten: 01:45 SGT Sat 28 Nov = 12:45 ET Fri 27 Nov
+final_flatten_et: "2026-11-27T12:45"

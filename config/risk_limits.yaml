@@ -1,0 +1,50 @@
+# Timón risk limits — enforced by timon/risk.py and timon/killswitch.py.
+# Change only via a commit with a reason; the diff is part of the audit trail.
+version: 1
+
+sizing:
+  risk_per_trade_pct: 0.5        # % of equity risked between entry and stop
+  max_position_notional_pct: 20  # cap per position, % of equity
+  gap_multiple: 3                # size so a gap of N x stop distance loses <= gap_loss_cap_pct
+  gap_loss_cap_pct: 1.5            # = gap_multiple x risk_per_trade: a 3x gap never costs more than 1.5%
+  min_shares: 1
+
+exposure:
+  gross_cap_pct:                 # max gross exposure by regime, % of equity
+    RISK_ON: 80
+    RISK_OFF: 30
+    CHOP: 20
+  chop_size_multiplier: 0.5      # CHOP trades at half size
+  platform_single_stock_cap_pct: 40  # competition hard cap (we stay far below)
+
+orders:
+  max_orders_per_day: 20         # platform cap is 200
+  max_new_entries_per_day: 4
+  entry_cutoff_et: "13:00"       # no new entries after this time
+
+kill_switch:
+  daily_loss_halt_pct: 1.5       # halt new orders for the day
+  drawdown_flatten_pct: 4.0      # flatten everything, disable executor
+  loss_streak_halve: 4           # halve size after N consecutive losses
+  max_quote_age_sec: 120         # older quote = stale = HOLD
+  missed_check_minutes: 12       # gap since last check while holding = flatten first
+
+universe:
+  min_price: 1.0
+  min_market_cap_usd: 500000000
+  min_avg_volume: 1000000
+  symbols: [SPY, QQQ, IWM, XLK, XLF, XLE, XLV, XLY, SMH]
+
+strategy:
+  opening_range_minutes: 30
+  target_r: 2.0
+  stop_atr_multiple: 1.0
+  eod_flatten_et: "15:50"
+  earnings_block_days: 1
+
+autonomy:
+  # stage 1: every order escalates to human
+  # stage 2: orders with risk_pct <= auto_risk_pct_stage2 auto-approve, rest escalate
+  # stage 3: auto within limits
+  stage: 1
+  auto_risk_pct_stage2: 0.25
