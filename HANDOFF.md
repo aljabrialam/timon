@@ -86,7 +86,7 @@ and skip runs when flat with no signal (pre-check `python -m timon session`).
 | Repo skills (4) | Drafted | tool names TBD; zips via `scripts/package_skills.py` |
 | AGENTS.md | Drafted | not deployed |
 | README | Rewritten | valora-vr style: badges, logo mark, cycle + module diagrams, risk table, results table |
-| Local git | 11 commits on `main` | pushed, tracking `origin/main` |
+| Local git | 12 commits on `main` | pushed, tracking `origin/main` |
 | Competition account ID | **Candidate, unconfirmed** | US paper `5822597` "US Margin Account [Paper Trading]" (market_id 100) is the only US paper account. Trading reads fail: `MCP_RUNTIME_NOT_READY` (sim_trade_*) and `MCP_MANAGED_AUTHORIZATION_REQUIRED` (account_authorized_trd_accs) |
 | Moomoo MCP tool names | Partial | 104 `moomoo_*` tools live in Qoder; `quote_stock_quote` validated (US.AAPL 352.78). Full param catalogue = step 4 |
 | GitHub remote | **Created** | https://github.com/aljabrialam/timon (public; no LICENSE file yet) |
