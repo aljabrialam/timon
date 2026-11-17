@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.timon.slack</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/aljabri.alam/.slack/bin/slack</string>
+    <string>run</string>
+    <string>-s</string>
+    <string>--app=A0CHXMAG9M5</string>
+    <string>--org-workspace-grant=all</string>
+    <string>--no-activity</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/aljabri.alam/Documents/Qoder/2026-11-17/c0d1cb92/timon/slack</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>SSL_CERT_FILE</key>
+    <string>/Users/aljabri.alam/Documents/Qoder/2026-11-17/c0d1cb92/timon/slack/.venv/lib/python3.14/site-packages/certifi/cacert.pem</string>
+    <key>REQUESTS_CA_BUNDLE</key>
+    <string>/Users/aljabri.alam/Documents/Qoder/2026-11-17/c0d1cb92/timon/slack/.venv/lib/python3.14/site-packages/certifi/cacert.pem</string>
+    <key>PATH</key>
+    <string>/Users/aljabri.alam/.slack/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/Users/aljabri.alam/Library/Logs/timon-slack.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/aljabri.alam/Library/Logs/timon-slack.log</string>
+</dict>
+</plist>
