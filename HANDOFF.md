@@ -4,7 +4,7 @@
 > decisions, skills, status, next steps. Detailed plan: `TIMON.md`. Agent prompts: `AGENTS.md`.
 > **Update sections 4, 6, 12 and 14 at the end of every session** using prompt 0.3.
 
-**Last updated:** 2026-11-17 14:00 SGT · **By:** planning workspace (build session 1) · **Repo rev:** see `git log -1`
+**Last updated:** 2026-11-17 14:18 SGT · **By:** Qoder (session 2, step 2) · **Repo rev:** see `git log -1`
 
 ---
 
@@ -82,13 +82,14 @@ and skip runs when flat with no signal (pre-check `python -m timon session`).
 |---|---|---|
 | Research (all competition links + docs) | Done | facts in sections 7–8 |
 | TIMON.md plan | v0.4 | |
-| Engine `timon/` | Done, **43 tests pass** | session/calendar, regime, ORB, risk gate, kill switch, exits, hash-chained ledger, metrics, CLI |
+| Engine `timon/` | Done, **43 tests pass** | session/calendar, regime, ORB, risk gate, kill switch, exits, hash-chained ledger, metrics, CLI. `pip install -e` currently fails (setuptools flat-layout; add `[tool.setuptools] packages = ["timon"]`); run tests via venv `python -m pytest -q` |
 | Repo skills (4) | Drafted | tool names TBD; zips via `scripts/package_skills.py` |
 | AGENTS.md | Drafted | not deployed |
 | Local git | 1 commit on `main` | no remote yet |
 | Competition account ID | **Missing** | engine blocks all orders until set |
-| Moomoo MCP tool names | **Unknown** | |
+| Moomoo MCP tool names | Partial | 104 `moomoo_*` tools live in Qoder; `quote_stock_quote` validated (US.AAPL 352.78). Full param catalogue = step 4 |
 | GitHub remote | Not created | |
+| Qoder Cloud Agents plugin | Installed v1.3.0 | official (1 skill + 1 MCP server); runtime-ready, tools appear after session reload |
 | QCA vault / skills / agents / template | Not started | Qoder |
 | Slack bot | Not started | Qoder |
 | Schedule | Not started | Qoder |
@@ -112,7 +113,7 @@ and skip runs when flat with no signal (pre-check `python -m timon session`).
 
 ## 6. Next (in order)
 - [ ] 1. **moomoo app:** confirm competition account appears (Discover → Paper Trade → Competition).
-- [ ] 2. **Qoder Desktop:** open repo; install moomoo OpenAPI connector (**Market Data only**), moomoo-skill, Qoder Cloud Agents plugin. Check: "What is the current price of US.AAPL?"
+- [x] 2. **Qoder Desktop:** connector (**Market Data only**) + Cloud Agents plugin installed; AAPL quote check passed. **moomoo-skill still missing** — official install fails verification (`EXTENSION_SKILL_INSTALL_VERIFY_FAILED`, 3 attempts, nothing written to `~/.qoder/skills`) → install from the Marketplace UI or retry in a fresh session.
 - [ ] 3. **Qoder:** "List my paper trading accounts and confirm you can access the Qoder AI Agent Trading Challenge account." → ID into `config/account.yaml`, commit.
 - [ ] 4. **Qoder:** "What can I do with this MCP? List every tool name and its parameters." → paste into section 12; update researcher/executor skills with exact tool names.
 - [ ] 5. **Qoder:** test trade + close in a **non-competition** paper account; confirm supported order types (limit/market; stops?).
@@ -219,7 +220,8 @@ Cycle: researcher → snapshot → `timon plan` → auditor gates → executor (
 |---|---|
 | Competition account ID | — |
 | Non-competition test account ID | — |
-| Moomoo MCP tools | — |
+| Moomoo MCP tools | 104 live (`moomoo_*`); `quote_stock_quote(code_list)` verified; full catalogue pending |
+| Qoder Cloud Agents plugin | v1.3.0 installed (1 skill + 1 MCP server); tools after reload |
 | GitHub repo | — |
 | QCA environment ID | — |
 | QCA vault ID | — |
@@ -245,3 +247,4 @@ Cycle: researcher → snapshot → `timon plan` → auditor gates → executor (
 | When (SGT) | Who | What changed | Credits used |
 |---|---|---|---|
 | 17 Nov 13:00–14:00 | Workspace | Researched all competition links + docs. Built TIMON.md, engine (43 tests), 4 skills, AGENTS.md, README, HANDOFF. Local git commit. | 0 (Qoder) |
+| 17 Nov 14:05–14:20 | Qoder | Step 2: connector verified (AAPL 352.78), Cloud Agents plugin v1.3.0 installed; moomoo-skill install fails verification; 43 tests re-run green. | — |
