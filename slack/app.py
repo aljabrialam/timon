@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import subprocess
+import sys
 from pathlib import Path
 
 from slack_bolt import App
@@ -10,7 +11,10 @@ from slack_bolt.adapter.socket_mode import SocketModeHandler
 logging.basicConfig(level=logging.INFO)
 
 REPO = Path(__file__).resolve().parent.parent
-ENGINE_PYTHON = os.environ.get("TIMON_PYTHON", str(REPO / ".venv" / "bin" / "python"))
+VENV_PYTHON = REPO / ".venv" / "bin" / "python"
+ENGINE_PYTHON = os.environ.get("TIMON_PYTHON") or (
+    str(VENV_PYTHON) if VENV_PYTHON.exists() else sys.executable
+)
 
 HELP = (
     "Timón (paper only). Commands:\n"
