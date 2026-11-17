@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Timón git for trading">
+  <defs>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, "Helvetica Neue", Arial, sans-serif; }
+      .ink { fill: #191b21; }
+      .body { fill: #4c515c; }
+      .muted { fill: #6b707c; }
+      .faint { fill: #9aa0ac; }
+      .mono { font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; }
+      .term { font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 21px; font-weight: 600; fill: #191b21; letter-spacing: -.01em; }
+      .term-a { font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 21px; font-weight: 600; fill: #a8431f; letter-spacing: -.01em; }
+      .head { font-size: 10.5px; font-weight: 700; fill: #9aa0ac; letter-spacing: .11em; }
+      .title { font-size: 18px; font-weight: 600; fill: #191b21; letter-spacing: -.01em; }
+      .sub { font-size: 13px; fill: #6b707c; }
+      .code { font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 12.5px; fill: #555b66; }
+      .code-a { font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 12.5px; fill: #a8431f; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#f6f7fa"/>
+
+  <text x="80" y="68" class="ink" style="font-size:34px;font-weight:600;letter-spacing:-.03em">Git for trading</text>
+  <text x="80" y="100" class="muted" style="font-size:16px">The trading repo uses the same five commands as any codebase. Each one answers a question about a trade.</text>
+
+  <text x="80" y="158" class="head">COMMAND</text>
+  <text x="440" y="158" class="head">WHAT IT ANSWERS</text>
+  <text x="1140" y="158" class="head">IN THIS REPO</text>
+  <rect x="80" y="172" width="1440" height="1" fill="#dfe3eb"/>
+
+  <!-- commit -->
+  <text x="80" y="222" class="term-a">commit</text>
+  <text x="440" y="216" class="title">What did the system decide, and on what basis?</text>
+  <text x="440" y="240" class="sub">Every cycle ends in a commit: snapshot, plan, verdicts. Nothing lives only in memory.</text>
+  <text x="1140" y="216" class="code-a">git commit -m "cycle: exits first"</text>
+  <text x="1140" y="238" class="faint" style="font-size:11.5px">runs unprompted at the end of every cycle</text>
+  <rect x="80" y="272" width="1440" height="1" fill="#e7eaf0"/>
+
+  <!-- diff -->
+  <text x="80" y="322" class="term">diff</text>
+  <text x="440" y="316" class="title">What changed in the rules between two runs?</text>
+  <text x="440" y="340" class="sub">A risk limit change is a reviewable diff, not a setting someone remembers editing.</text>
+  <text x="1140" y="316" class="code">git diff config-frozen..HEAD</text>
+  <text x="1140" y="338" class="faint" style="font-size:11.5px">the freeze tag is created on 23 November</text>
+  <rect x="80" y="372" width="1440" height="1" fill="#e7eaf0"/>
+
+  <!-- branch -->
+  <text x="80" y="422" class="term">branch</text>
+  <text x="440" y="416" class="title">What would the other strategy have done?</text>
+  <text x="440" y="440" class="sub">A shadow branch runs the baseline on the same data. Logged and compared, never traded.</text>
+  <text x="1140" y="416" class="code">git switch -c shadow-orb</text>
+  <text x="1140" y="438" class="faint" style="font-size:11.5px">experiments stay off the main line</text>
+  <rect x="80" y="472" width="1440" height="1" fill="#e7eaf0"/>
+
+  <!-- tag -->
+  <text x="80" y="522" class="term">tag</text>
+  <text x="440" y="516" class="title">Which state was the one we agreed to judge?</text>
+  <text x="440" y="540" class="sub">The config freeze is a tag. Out-of-sample results mean what they mean because of it.</text>
+  <text x="1140" y="516" class="code">git tag config-frozen</text>
+  <text x="1140" y="538" class="faint" style="font-size:11.5px">any result after it is out-of-sample</text>
+  <rect x="80" y="572" width="1440" height="1" fill="#e7eaf0"/>
+
+  <!-- blame -->
+  <text x="80" y="622" class="term">blame</text>
+  <text x="440" y="616" class="title">Which decision opened this position?</text>
+  <text x="440" y="640" class="sub">Every ledger line is attributable to the commit, the snapshot and the rule that produced it.</text>
+  <text x="1140" y="616" class="code">git log -S "SPY" -- logs/decisions.jsonl</text>
+  <text x="1140" y="638" class="faint" style="font-size:11.5px">the commits that touched this symbol</text>
+
+  <rect x="80" y="688" width="1440" height="1" fill="#dfe3eb"/>
+
+  <text x="80" y="728" class="head">THE LEDGER</text>
+  <text x="80" y="760" class="body" style="font-size:15px">Each entry carries a hash of the entry before it, so the log can be checked instead of trusted.</text>
+  <text x="80" y="784" class="body" style="font-size:15px">Editing one entry breaks every entry after it, and the verifier says so.</text>
+  <text x="1140" y="760" class="code">python -m timon verify</text>
+  <text x="1140" y="782" class="faint" style="font-size:11.5px">walks the chain and reports the first break</text>
+
+  <text x="80" y="848" class="faint" style="font-size:12px">The repo is the record. This diagram deliberately carries no results; the ledger carries the results.</text>
+</svg>

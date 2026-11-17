@@ -1,0 +1,81 @@
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --canvas: #f2f4f8;
+  --canvas-deep: #e7eaf1;
+  --card: #ffffff;
+  --card-soft: #f7f8fb;
+  --line: #dfe3eb;
+  --line-strong: #c9cfda;
+
+  /* Ink */
+  --ink: #191b21;
+  --ink-2: #4c515c;
+  --muted: #6b707c;
+  --faint: #9aa0ac;
+
+  /* One accent */
+  --accent: #cf5a32;
+  --accent-soft: #f8e7e0;
+  --accent-ink: #a8431f;
+
+  /* Verdicts, semantic only */
+  --approve: #1f7a55;
+  --approve-soft: #e6f3ec;
+  --shrink: #8a5a1e;
+  --shrink-soft: #fbf0df;
+  --escalate: #2f6fb3;
+  --escalate-soft: #e6eef8;
+  --block: #b0453c;
+  --block-soft: #fbeae7;
+
+  /* Type */
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", Inter, "Helvetica Neue", Arial, sans-serif;
+  --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  --t-display: 64px;
+  --t-h1: 44px;
+  --t-h2: 30px;
+  --t-h3: 22px;
+  --t-body: 17px;
+  --t-small: 14px;
+  --t-caption: 12px;
+  --t-mono: 14px;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --canvas: #14161a;
+  --canvas-deep: #0f1115;
+  --card: #1b1e24;
+  --card-soft: #20242b;
+  --line: #2a2e36;
+  --line-strong: #3a404a;
+  --ink: #f5f6f8;
+  --ink-2: #c9ced8;
+  --muted: #a2a8b4;
+  --faint: #7c828e;
+  --accent: #e07a55;
+  --accent-soft: #3a241d;
+  --accent-ink: #f2a184;
+  --approve: #5fc79a;
+  --approve-soft: #17332a;
+  --shrink: #e0b06a;
+  --shrink-soft: #352a18;
+  --escalate: #8cb8ea;
+  --escalate-soft: #1b2a3c;
+  --block: #ec8f86;
+  --block-soft: #3a211f;
+}
+
+.type-display { font-size: var(--t-display); line-height: 1.05; font-weight: 600; letter-spacing: -0.035em; }
+.type-h1 { font-size: var(--t-h1); line-height: 1.1; font-weight: 600; letter-spacing: -0.025em; }
+.type-h2 { font-size: var(--t-h2); line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
+.type-h3 { font-size: var(--t-h3); line-height: 1.25; font-weight: 600; letter-spacing: -0.015em; }
+.type-body { font-size: var(--t-body); line-height: 1.5; font-weight: 400; }
+.type-small { font-size: var(--t-small); line-height: 1.45; font-weight: 400; }
+.type-caption { font-size: var(--t-caption); line-height: 1.35; font-weight: 400; }
+.type-mono { font-family: var(--mono); font-size: var(--t-mono); line-height: 1.4; }
+
+/* Dashboard mapping: card title 21/28, body 14/21, label 10/14, figure 44/44. */

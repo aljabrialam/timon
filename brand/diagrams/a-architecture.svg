@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Timón architecture">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10" fill="none" stroke="#8a909c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="ar-a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10" fill="none" stroke="#cf5a32" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, "Helvetica Neue", Arial, sans-serif; }
+      .ink { fill: #191b21; }
+      .body { fill: #4c515c; }
+      .muted { fill: #6b707c; }
+      .faint { fill: #9aa0ac; }
+      .card { fill: #ffffff; stroke: #dfe3eb; stroke-width: 1.2; }
+      .panel { fill: #eef0f4; stroke: #dfe3eb; stroke-width: 1.2; }
+      .accent-card { fill: #ffffff; stroke: #cf5a32; stroke-width: 1.6; }
+      .dark-card { fill: #24272e; stroke: #24272e; }
+      .arrow { stroke: #8a909c; stroke-width: 1.4; fill: none; marker-end: url(#ar); }
+      .arrow-a { stroke: #cf5a32; stroke-width: 1.6; fill: none; marker-end: url(#ar-a); }
+      .dash { stroke: #a8aeb9; stroke-width: 1.2; fill: none; stroke-dasharray: 4 5; marker-end: url(#ar); }
+      .label { font-size: 12px; fill: #6b707c; letter-spacing: .02em; }
+      .cap { font-size: 11px; fill: #6b707c; letter-spacing: .1em; }
+      .title { font-size: 18px; font-weight: 600; fill: #191b21; letter-spacing: -.01em; }
+      .sub { font-size: 12px; fill: #6b707c; }
+      .num { font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 11px; fill: #9aa0ac; }
+      .pill { font-size: 9.5px; font-weight: 700; fill: #555b66; letter-spacing: .09em; }
+      .pill-a { font-size: 9.5px; font-weight: 700; fill: #a8431f; letter-spacing: .09em; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#f6f7fa"/>
+
+  <text x="80" y="68" class="ink" style="font-size:34px;font-weight:600;letter-spacing:-.03em">Timón architecture</text>
+  <text x="80" y="98" class="muted" style="font-size:16px">One scheduled loop. Deterministic decisions. SIMULATE only.</text>
+
+  <rect x="50" y="140" width="860" height="570" rx="18" class="panel"/>
+  <text x="80" y="176" class="cap">QODER CLOUD AGENTS</text>
+  <text x="80" y="197" class="sub">coordinator + three locked agents + one advisor</text>
+
+  <!-- Row 1 -->
+  <rect x="90" y="240" width="220" height="100" rx="14" class="card"/>
+  <text x="112" y="273" class="title">Schedule</text>
+  <text x="112" y="296" class="sub">cron · America/New_York</text>
+  <text x="112" y="318" class="num">one run, one session</text>
+
+  <rect x="360" y="240" width="220" height="100" rx="14" class="card"/>
+  <text x="382" y="273" class="title">Coordinator</text>
+  <text x="382" y="296" class="sub">runs the cycle, delegates</text>
+  <rect x="382" y="308" width="52" height="18" rx="9" fill="#eef0f4"/>
+  <text x="394" y="321" class="pill">AGENT</text>
+
+  <rect x="630" y="240" width="220" height="100" rx="14" class="card"/>
+  <text x="652" y="273" class="title">Researcher</text>
+  <text x="652" y="296" class="sub">reads data, builds snapshot</text>
+  <rect x="652" y="308" width="52" height="18" rx="9" fill="#eef0f4"/>
+  <text x="664" y="321" class="pill">AGENT</text>
+
+  <!-- Row 2 -->
+  <rect x="90" y="440" width="220" height="100" rx="14" class="accent-card"/>
+  <text x="112" y="473" class="title">timon engine</text>
+  <text x="112" y="496" class="sub">sizes, gates, writes the plan</text>
+  <rect x="112" y="508" width="64" height="18" rx="9" fill="#f8e7e0"/>
+  <text x="122" y="521" class="pill-a">NO LLM</text>
+
+  <rect x="360" y="440" width="220" height="100" rx="14" class="card"/>
+  <text x="382" y="473" class="title">Risk Auditor</text>
+  <text x="382" y="496" class="sub">may tighten, never loosen</text>
+  <rect x="382" y="508" width="52" height="18" rx="9" fill="#eef0f4"/>
+  <text x="394" y="521" class="pill">AGENT</text>
+
+  <rect x="630" y="440" width="220" height="100" rx="14" class="card"/>
+  <text x="652" y="473" class="title">Executor</text>
+  <text x="652" y="496" class="sub">places approved orders</text>
+  <rect x="652" y="508" width="52" height="18" rx="9" fill="#eef0f4"/>
+  <text x="664" y="521" class="pill">AGENT</text>
+
+  <!-- Flow -->
+  <path d="M310 290H348" class="arrow"/>
+  <path d="M580 290H618" class="arrow"/>
+  <path d="M740 340V390H200V428" class="arrow"/>
+  <text x="470" y="382" class="label">snapshot</text>
+  <path d="M310 490H348" class="arrow"/>
+  <text x="322" y="478" class="label">plan</text>
+  <path d="M580 490H618" class="arrow"/>
+  <text x="592" y="478" class="label">gate</text>
+
+  <!-- Moomoo column -->
+  <rect x="980" y="240" width="250" height="110" rx="14" class="card"/>
+  <text x="1002" y="273" class="title">Moomoo MCP</text>
+  <text x="1002" y="296" class="sub">OAuth connector for quotes and orders</text>
+  <text x="1002" y="318" class="num">mcp.moomoo.com/mcp</text>
+  <text x="1190" y="273" class="faint" style="font-size:10px;letter-spacing:.1em">EXTERNAL</text>
+
+  <rect x="980" y="400" width="250" height="130" rx="14" class="card"/>
+  <text x="1002" y="433" class="title">Paper account</text>
+  <text x="1002" y="456" class="sub">competition · SIMULATE</text>
+  <text x="1002" y="478" class="sub">live moomoo prices</text>
+  <text x="1002" y="500" class="num">never a live account</text>
+
+  <rect x="980" y="580" width="250" height="100" rx="14" class="card"/>
+  <text x="1002" y="613" class="title">Vault</text>
+  <text x="1002" y="636" class="sub">stores the Moomoo MCP credential</text>
+  <text x="1002" y="658" class="num">no tools without it</text>
+
+  <path d="M850 290H974" class="arrow"/>
+  <text x="886" y="280" class="label">quotes</text>
+  <path d="M850 490H910V465H974" class="arrow"/>
+  <text x="858" y="480" class="label">orders</text>
+  <path d="M1105 350V388" class="arrow"/>
+  <text x="1116" y="374" class="label">tools</text>
+  <path d="M1230 630H1292V350H1238" class="dash"/>
+  <text x="1300" y="500" class="label">credential</text>
+
+  <!-- Bottom band -->
+  <rect x="90" y="760" width="260" height="100" rx="14" class="card"/>
+  <text x="112" y="793" class="title">GitHub ledger</text>
+  <text x="112" y="816" class="sub">hash-chained decisions</text>
+  <text x="112" y="838" class="num">append only</text>
+
+  <rect x="430" y="760" width="260" height="100" rx="14" class="card"/>
+  <text x="452" y="793" class="title">Vercel dashboard</text>
+  <text x="452" y="816" class="sub">reads the repo, never the broker</text>
+  <text x="452" y="838" class="num">no credentials in the browser</text>
+
+  <rect x="770" y="760" width="260" height="100" rx="14" class="card"/>
+  <text x="792" y="793" class="title">Slack</text>
+  <text x="792" y="816" class="sub">alerts, approvals, daily report</text>
+  <text x="792" y="838" class="num">one human channel</text>
+
+  <path d="M200 540V748" class="arrow"/>
+  <text x="210" y="650" class="label">commit</text>
+  <path d="M350 810H418" class="arrow"/>
+  <text x="368" y="800" class="label">reads</text>
+  <path d="M800 760V552" class="arrow"/>
+  <text x="810" y="690" class="label">approvals</text>
+
+  <text x="80" y="878" class="faint" style="font-size:12px">Dashed line: credential path. Every order path is SIMULATE only and fails closed.</text>
+</svg>

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Timón verdict ladder">
+  <defs>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, "Helvetica Neue", Arial, sans-serif; }
+      .ink { fill: #191b21; }
+      .body { fill: #4c515c; }
+      .muted { fill: #6b707c; }
+      .faint { fill: #9aa0ac; }
+      .card { fill: #ffffff; stroke: #dfe3eb; stroke-width: 1.2; }
+      .cap { font-size: 11px; fill: #6b707c; letter-spacing: .1em; }
+      .verdict { font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 17px; font-weight: 600; letter-spacing: .06em; }
+      .sub { font-size: 12.5px; fill: #6b707c; }
+      .rule { font-size: 13.5px; fill: #4c515c; }
+      .why { font-size: 12px; fill: #9aa0ac; }
+      .idx { font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 11px; fill: #b6bcc6; font-weight: 600; }
+      .tag { font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 11px; letter-spacing: .02em; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#f6f7fa"/>
+
+  <text x="80" y="68" class="ink" style="font-size:34px;font-weight:600;letter-spacing:-.03em">Verdict ladder</text>
+  <text x="80" y="100" class="muted" style="font-size:16px">Four possible outcomes for a signal. Each has a fixed meaning and a written reason.</text>
+
+  <!-- APPROVE -->
+  <text x="80" y="152" class="idx">01</text>
+  <rect x="80" y="166" width="1440" height="140" rx="14" class="card"/>
+  <rect x="80" y="166" width="4" height="140" rx="2" fill="#1f7a55"/>
+  <text x="112" y="208" class="verdict" fill="#1f7a55">APPROVE</text>
+  <text x="112" y="234" class="sub">trade as planned</text>
+  <text x="440" y="204" class="rule">Every limit is inside its budget: size fits the risk cap, the notional cap and the daily counts.</text>
+  <text x="440" y="230" class="rule">Regime size applies unchanged. The order is queued in priority order.</text>
+  <text x="440" y="270" class="why">Example: a long entry on a liquid ETF, regime RISK_ON, first entry of the day, no gap penalty.</text>
+  <rect x="1300" y="188" width="196" height="26" rx="13" fill="#eaf4ef"/>
+  <text x="1322" y="206" class="tag" fill="#1f7a55">size unchanged</text>
+
+  <!-- SHRINK -->
+  <text x="80" y="338" class="idx">02</text>
+  <rect x="80" y="352" width="1440" height="140" rx="14" class="card"/>
+  <rect x="80" y="352" width="4" height="140" rx="2" fill="#8a5a1e"/>
+  <text x="112" y="394" class="verdict" fill="#8a5a1e">SHRINK</text>
+  <text x="112" y="420" class="sub">trade smaller</text>
+  <text x="440" y="390" class="rule">The idea survives, the size does not. Half size in CHOP, after four losses, or when the gap rule bites.</text>
+  <text x="440" y="416" class="rule">Quantity is recomputed from the reduced risk budget. The stop does not move.</text>
+  <text x="440" y="456" class="why">Example: fifth entry candidate in one day, or a gap three times the stop distance.</text>
+  <rect x="1300" y="374" width="196" height="26" rx="13" fill="#f7efe2"/>
+  <text x="1322" y="392" class="tag" fill="#8a5a1e">quantity reduced</text>
+
+  <!-- ESCALATE -->
+  <text x="80" y="524" class="idx">03</text>
+  <rect x="80" y="538" width="1440" height="140" rx="14" class="card"/>
+  <rect x="80" y="538" width="4" height="140" rx="2" fill="#2f6fb3"/>
+  <text x="112" y="580" class="verdict" fill="#2f6fb3">ESCALATE</text>
+  <text x="112" y="606" class="sub">wait for a human</text>
+  <text x="440" y="576" class="rule">The engine cannot resolve the case inside its own rules: conflicting signals, an input the config cannot price.</text>
+  <text x="440" y="602" class="rule">Nothing is placed. A question goes to Slack and the cycle continues with the rest of the plan.</text>
+  <text x="440" y="642" class="why">Example: a quote that arrives, but not fresh enough to trust the size it implies.</text>
+  <rect x="1300" y="560" width="196" height="26" rx="13" fill="#eaf1f9"/>
+  <text x="1322" y="578" class="tag" fill="#2f6fb3">no order placed</text>
+
+  <!-- BLOCK -->
+  <text x="80" y="710" class="idx">04</text>
+  <rect x="80" y="724" width="1440" height="140" rx="14" class="card"/>
+  <rect x="80" y="724" width="4" height="140" rx="2" fill="#b0453c"/>
+  <text x="112" y="766" class="verdict" fill="#b0453c">BLOCK</text>
+  <text x="112" y="792" class="sub">no trade</text>
+  <text x="440" y="762" class="rule">A hard rule is broken and size cannot fix it: halt tripped, account mismatch, no fresh quote, count hit.</text>
+  <text x="440" y="788" class="rule">The check that failed is written into the ledger by name. There is no entry this cycle.</text>
+  <text x="440" y="828" class="why">Example: the kill switch fired earlier today, or the account is not the competition account.</text>
+  <rect x="1300" y="746" width="196" height="26" rx="13" fill="#fbeeed"/>
+  <text x="1322" y="764" class="tag" fill="#b0453c">reason recorded</text>
+
+  <text x="80" y="884" class="faint" style="font-size:12.5px">The auditor may tighten a verdict. It may never loosen one.</text>
+</svg>
