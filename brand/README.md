@@ -7,11 +7,11 @@ brand/
   README.md              this file
   tokens.css             colours, type scale, verdict palette (light + dark)
   render-diagrams.sh     SVG -> PNG at 2x, via headless Chrome
+  render-logo.sh         logo PNGs, transparent, at 2x / 32 / 64 px
   logo/
-    option-a-hairline-{light,dark}.svg    "Merge"
-    option-b-anchor-{light,dark}.svg      "Fork"
-    option-c-signal-{light,dark}.svg      "Minimal"
-    options-preview.html / .png           the three side by side
+    timon-lockup-{light,dark}.svg      mark + wordmark, 248x72
+    timon-mark-{light,dark}.svg        mark only, 64x64
+    timon-favicon-{light,dark}.svg     one colour, 32x32
   diagrams/
     a-architecture.{svg,png}   the system, once
     b-cycle.{svg,png}          what happens in one run
@@ -20,29 +20,32 @@ brand/
     e-git.{svg,png}            git commands mapped to trading
 ```
 
-PNG files are generated. Edit the SVG, run `./brand/render-diagrams.sh`, commit both.
+PNG files are generated. Edit the SVG, run `./brand/render-diagrams.sh` or `./brand/render-logo.sh`, commit both.
 
 ## Logo
 
-**Status: three options, waiting for the pick.** Nothing is finalised until one is chosen — no favicon, no social card, no deck header, no README lockup.
+**Chosen: C, Minimal.** A (Merge) drew a branch leaving the wheel and merging back; B (Fork) split the top spoke. Both lost detail at icon sizes — A becomes a smudge, B is neither a wheel nor a fork. C keeps three spokes and three rivets, which is the least a helm needs to stay a helm. A and B live in git history, not in this folder.
 
-All three start from the same idea: a ship's wheel where part of the wheel is a git graph. The wheel is Timón (the helm); the branch and the commit dots are the ledger. They differ only in how much git they show.
+The mark is a ship's wheel where the three spokes end in commit dots. The wheel is Timón; the dots are the ledger.
 
-| Option | File prefix | Idea | Reads at 32 px |
-|---|---|---|---|
-| A | `option-a-hairline` | Merge: three spokes, three rim dots, one branch that leaves the wheel and merges back | busy |
-| B | `option-b-anchor` | Fork: the top spoke splits into two branch ends | ok |
-| C | `option-c-signal` | Minimal: three spokes, three rim dots, no outside branch | best |
+### Files
 
-The recommendation is **C**. It keeps the metaphor of a wheel with commit dots at the rim, and at 32 px it is still three strokes and three dots rather than a smudge. A is the most literal git drawing and the weakest icon; B sits between them.
+| Use | File | Notes |
+|---|---|---|
+| Horizontal lockup | `timon-lockup-{light,dark}.svg` | 248 × 72. Mark centred at 36,36; wordmark at x=76, 33 px, weight 600, tracking −0.8, accent kept on the **ó**. |
+| Mark only | `timon-mark-{light,dark}.svg` | 64 × 64. Same geometry, shifted 2 units up and cropped to `viewBox="12 12 48 48"` so the ink is centred with 3 units of air. Keeps the accent hub. |
+| Favicon | `timon-favicon-{light,dark}.svg` | 32 × 32, drawn on its own grid: rim, three spokes, three handles, one colour, no rivets and no hub. At 32 px the rivets merge into the rim and the hub turns the spokes into a star, so both are dropped and the handles carry the wheel reading. |
 
-### Lockups
+Rendered PNGs, transparent background:
 
-| Use | How |
+| File | Pixels |
 |---|---|
-| Horizontal lockup | The full SVG as drawn: mark at 36,36, wordmark starting at x=76. Wordmark is 33 px, weight 600, tracking −0.8, and keeps the accent on the **ó**. |
-| Mark only | Same file, `viewBox="0 0 72 72"`. Do not redraw the mark on its own grid. |
-| Favicon | The mark, square, 32 px. One colour only: ink on light, white on dark. No accent hub at this size. |
+| `timon-lockup-{light,dark}-2x.png` | 496 × 144 |
+| `timon-mark-{light,dark}-2x.png` | 128 × 128 |
+| `timon-favicon-{light,dark}-32.png` | 32 × 32 |
+| `timon-favicon-{light,dark}-64.png` | 64 × 64 |
+
+The wordmark is live text, rendered through `system-ui` — SF Pro on macOS, Segoe UI on Windows, Inter where installed. Slides, the video and the GitHub README should use the PNG: a logo that reflows with the viewer's fonts is not a logo. Do not convert the wordmark to outlines; SF is not licensed for that and the PNG already solves it.
 
 Never typeset "Timón" without the accent. Never set it in all caps. Never re-space the letters. Never put the mark inside a rounded square, circle or badge — the wheel is already round and a second ring fights it.
 
