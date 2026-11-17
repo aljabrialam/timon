@@ -86,7 +86,7 @@ and skip runs when flat with no signal (pre-check `python -m timon session`).
 | Repo skills (4) | Drafted | tool names TBD; zips via `scripts/package_skills.py` |
 | AGENTS.md | Drafted | not deployed |
 | Local git | 1 commit on `main` | no remote yet |
-| Competition account ID | **Missing** | engine blocks all orders until set |
+| Competition account ID | **Candidate, unconfirmed** | US paper `5822597` "US Margin Account [Paper Trading]" (market_id 100) is the only US paper account. Trading reads fail: `MCP_RUNTIME_NOT_READY` (sim_trade_*) and `MCP_MANAGED_AUTHORIZATION_REQUIRED` (account_authorized_trd_accs) |
 | Moomoo MCP tool names | Partial | 104 `moomoo_*` tools live in Qoder; `quote_stock_quote` validated (US.AAPL 352.78). Full param catalogue = step 4 |
 | GitHub remote | Not created | |
 | Qoder Cloud Agents plugin | Installed v1.3.0 | official (1 skill + 1 MCP server); runtime-ready, tools appear after session reload |
@@ -114,7 +114,7 @@ and skip runs when flat with no signal (pre-check `python -m timon session`).
 ## 6. Next (in order)
 - [ ] 1. **moomoo app:** confirm competition account appears (Discover → Paper Trade → Competition).
 - [x] 2. **Qoder Desktop:** connector (**Market Data only**) + Cloud Agents plugin installed; AAPL quote check passed. **moomoo-skill still missing** — official install fails verification (`EXTENSION_SKILL_INSTALL_VERIFY_FAILED`, 3 attempts, nothing written to `~/.qoder/skills`) → install from the Marketplace UI or retry in a fresh session.
-- [ ] 3. **Qoder:** "List my paper trading accounts and confirm you can access the Qoder AI Agent Trading Challenge account." → ID into `config/account.yaml`, commit.
+- [ ] 3. **Qoder:** paper accounts listed — US `5822597` is the only US one. **Blocked:** trade scopes not granted (`MCP_MANAGED_AUTHORIZATION_REQUIRED`, `sim_trade_*` → `MCP_RUNTIME_NOT_READY`). Need: owner confirms the competition account in the app + connector re-authorized with trading scopes → then ID into `config/account.yaml`, commit.
 - [ ] 4. **Qoder:** "What can I do with this MCP? List every tool name and its parameters." → paste into section 12; update researcher/executor skills with exact tool names.
 - [ ] 5. **Qoder:** test trade + close in a **non-competition** paper account; confirm supported order types (limit/market; stops?).
 - [ ] 6. Create GitHub repo `aljabrialam/timon` (public OK, no secrets), push.
@@ -218,8 +218,9 @@ Cycle: researcher → snapshot → `timon plan` → auditor gates → executor (
 ## 12. Environment facts (fill in; never tokens/passwords)
 | Fact | Value |
 |---|---|
-| Competition account ID | — |
-| Non-competition test account ID | — |
+| Competition account ID | candidate `5822597` (US paper, market_id 100) — **unconfirmed by app** |
+| Non-competition test account ID | none separate: `5822597` is the only US paper account (others: KR 5822590, HK 5822591, SG 5822592, JP 5822593, US futures 5822594, SG futures 5822595) |
+| Moomoo auth | Market Data only. Trade-scope calls fail: `MCP_MANAGED_AUTHORIZATION_REQUIRED`; `sim_trade_*` returns `MCP_RUNTIME_NOT_READY` |
 | Moomoo MCP tools | 104 live (`moomoo_*`); `quote_stock_quote(code_list)` verified; full catalogue pending |
 | Qoder Cloud Agents plugin | v1.3.0 installed (1 skill + 1 MCP server); tools after reload |
 | GitHub repo | — |
