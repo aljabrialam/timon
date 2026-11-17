@@ -4,7 +4,7 @@
 > decisions, skills, status, next steps. Detailed plan: `TIMON.md`. Agent prompts: `AGENTS.md`.
 > **Update sections 4, 6, 12 and 14 at the end of every session** using prompt 0.3.
 
-**Last updated:** 2026-11-17 16:10 SGT · **By:** Qoder (session 2) · **Repo rev:** see `git log -1`
+**Last updated:** 2026-11-17 16:40 SGT · **By:** Qoder (session 2) · **Repo rev:** see `git log -1`
 
 ---
 
@@ -94,7 +94,7 @@ and skip runs when flat with no signal (pre-check `python -m timon session`).
 | QCA vault / skills / agents / template | Partial | env `timon-env` + smoke-test template "Timón Slack test" created via MCP. Vault, skill upload and Slack channel have no MCP tools, so they're console-only. Forward sessions need an identity, which comes from channel pairing |
 | Slack bot | **Verified locally, host-ready** | Bolt Python app `A0CHXMAG9M5` (team `T0CJC214F5Y`), code in `slack/`. `hello` and `status` (session, kill switch, ledger) reply; status runs the engine read-only. Runs only while `slack run` is up. Host files added (`slack/requirements.txt`, `nixpacks.toml`) — **not deployed** |
 | Schedule | Not started | Qoder |
-| Dashboard | **Built, verified locally** | `dashboard/` static site (index.html · styles.css · app.js, hand-rolled SVG, no build step) fed by `scripts/export_dashboard.py` → `dashboard/data.json`. Verified at 315 px and via 1100 px iframe, zero console errors, empty and populated ledger. `vercel.json` ready; **not deployed** (needs `vercel login`) |
+| Dashboard | **Live** | https://timon-theta.vercel.app (Vercel project `aljs-projects/timon`, linked to the GitHub repo so pushes redeploy). Static site fed by `scripts/export_dashboard.py` → `dashboard/data.json`. Redesigned to an instrument-panel language: ruled sections, mono numerals, no cards or glow, zero em-dashes. Verified at 315 px and 1100 px, zero console errors, empty and populated ledger |
 | Deck / report | Not started | Qoder-generated (required) |
 | Meta VR competition | Due 18 Nov | separate project; protect time |
 
@@ -123,7 +123,7 @@ and skip runs when flat with no signal (pre-check `python -m timon session`).
 - [x] 8. Slack bot done as a **local Bolt Python app** (Slack CLI flow): app `A0CHXMAG9M5`, Socket Mode, scopes `app_mentions:read, chat:write, channels:history, groups:history, im:history, mpim:history`, events `app_mention, message.im`. Verified reply in `#timon-test`. **Not** the QCA channel — attaching QCA's Slack channel to the same app would double-answer; pick one. Still to do: activate hosting (§12 "Slack hosting") — LaunchAgent keeps `slack run` alive after the terminal closes; Railway/Heroku for always-on. Wired: `hello`, `status`; no order path.
 - [ ] 9. One manual cycle in QCA during US hours (stage 1). Measure credits → section 3 rule.
 - [ ] 10. Create schedule **from Slack** (prompt in TIMON.md §9.4). Ends 27 Nov 12:45 ET; skip 26 Nov.
-- [x] 11. Dashboard built: `scripts/export_dashboard.py` + static `dashboard/` (no build step) + `vercel.json`; verified at 315 px and in a 1100 px iframe. Remaining: `vercel login && vercel --prod` (owner's account), then regenerate `data.json` after each run.
+- [x] 11. Dashboard **live at https://timon-theta.vercel.app**: `scripts/export_dashboard.py` + static `dashboard/` (no build step) + `vercel.json` + `.vercelignore`; verified at 315 px and 1100 px. Repo is linked in Vercel, so a push that changes `dashboard/` redeploys. Regenerate `data.json` after each run.
 - [ ] 12. 26 Nov (closed): audit logs, fix bugs. 28–29 Nov: report + Qoder-generated deck + demo video. Submit by 30 Nov 23:59 SGT.
 
 ## 7. Competition facts
@@ -234,10 +234,10 @@ Cycle: researcher → snapshot → `timon plan` → auditor gates → executor (
 | Slack hosting | **Not deployed.** Two paths prepared. (a) Local and always-on-after-login, no external account: `slack/deploy/com.timon.slack.plist` is a launchd agent that keeps `slack run` alive; install with `cp slack/deploy/com.timon.slack.plist ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/com.timon.slack.plist` (logs `~/Library/Logs/timon-slack.log`; only while the Mac is awake). (b) Always-on host: Railway/Nixpacks reads `nixpacks.toml` (`pip install -r slack/requirements.txt`, start `python slack/app.py`) with `SLACK_BOT_TOKEN` + `SLACK_APP_TOKEN` as service variables — Socket Mode needs no public URL; Heroku uses `worker: python slack/app.py`. `slack deploy` targets Slack's own Deno runtime and is untested for Python |
 | Dashboard export | `.venv/bin/python scripts/export_dashboard.py` → `dashboard/data.json` (default snapshot `state/snapshot.json`; `--snapshot`, `--out`, `--now`). Reads `logs/decisions.jsonl` + `state/state.json`, writes nothing back |
 | Dashboard local preview | `python3 -m http.server 8000 -d dashboard` → http://localhost:8000. Static: `index.html` + `styles.css` + `app.js` (ES module, hand-rolled SVG, no build step, no npm) |
-| Dashboard deploy | `vercel.json` at repo root: `outputDirectory: "dashboard"`, `cleanUrls`, no-cache on `/data.json`. `vercel login && vercel --prod` — **needs the owner's Vercel account** |
+| Dashboard deploy | `vercel.json` at repo root: `framework: null`, `outputDirectory: "dashboard"`, `cleanUrls`, no-cache on `/data.json`; `.vercelignore` excludes venvs and the Python tree. `vercel --prod` (CLI already logged in as `aljabrialam`) |
 | Schedule ID | — |
 | Credits per cycle | — |
-| Dashboard URL | — (not deployed) |
+| Dashboard URL | https://timon-theta.vercel.app (project `aljs-projects/timon`, production alias). First deploy failed with `PYTHON_ENTRYPOINT_NOT_FOUND` until `framework: null` was added to `vercel.json` |
 
 ## 13. Links
 - Challenge site (Handbook, T&Cs, FAQ, Disclaimer): https://moomoo-qoder-challenge-rgkelnyuzbm.qoder.website/
@@ -260,3 +260,4 @@ Cycle: researcher → snapshot → `timon plan` → auditor gates → executor (
 | 17 Nov 15:30–15:40 | Qoder | Slack CLI v4.14.0 installed, logged into `moomootrading`; created `../timon-slack` from `bolt-python-blank-template` linked to app `A0CHXMAG9M5`; fixed macOS CA error with `certifi`; added mention/DM handlers; verified reply in `#timon-test`. | 0 |
 | 17 Nov 15:44–15:50 | Qoder | Moved the bot into `slack/`, wired read-only `status` (session, kill switch, ledger) to `python -m timon`; live reply confirmed. Made it host-ready: engine interpreter falls back to `sys.executable` when `.venv` is absent, added `slack/requirements.txt` and `nixpacks.toml`. Offline status check re-run green. Deploy still blocked on a host account (Railway/Heroku). | 0 |
 | 17 Nov 15:52–16:10 | Qoder | Built the dashboard: `scripts/export_dashboard.py` (ledger + state → `dashboard/data.json`, equity curve from closed P&L) and a no-build static UI (`index.html`, `styles.css`, `app.js`, hand-rolled SVG chart). Verified empty and populated states at 315 px with zero console errors, and desktop layout via a 1100 px iframe. Fixed mobile table overflow, chart tick stacking, grid overflow and repeat fetches on resize. Added `vercel.json`; deploy left to the owner's Vercel account. | 0 |
+| 17 Nov 16:10–16:40 | Qoder | Deployed the dashboard to Vercel (`timon-theta.vercel.app`). First build failed as a Python project; fixed with `framework: null` plus `.vercelignore`. Redesigned the page as an instrument panel (no cards, no glow, radius 0, mono numerals, AA-contrast faint text, ruled strips, tightened tables, real error state) using the anti-slop design skill's transferable rules. Verified live at 315 px, zero console errors, `/data.json` cache header confirmed. | 0 |

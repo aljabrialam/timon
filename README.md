@@ -13,9 +13,11 @@
 
 <h3 align="center">Every decision is a commit.<br>Every rule change is a diff.</h3>
 
+<p align="center"><a href="https://timon-theta.vercel.app"><b>Live dashboard</b></a> · timon-theta.vercel.app</p>
+
 **Timón is a paper-trading agent team where the language models gather facts and the arithmetic decides.** A researcher reads the market through Moomoo's MCP, a deterministic Python engine turns that snapshot into a plan, a risk auditor that can only tighten the plan gates it, and an executor places the orders. Every run ends as a git commit and a hash-chained ledger entry, so every position can be blamed back to the reason it was opened.
 
-> **Status (17 Nov 2026): engine and dashboard ready, nothing has traded.** The engine, the risk gate, the kill switch and the ledger are built and covered by 43 tests; the Moomoo connector is verified against a live quote; the read-only Slack bot answers `status`; the dashboard renders the ledger and is ready to deploy. Not built yet: the competition account is unconfirmed, so the account guard blocks every proposal; Qoder Cloud Agents deployment, Slack approvals and the schedule are pending. No order has been placed.
+> **Status (17 Nov 2026): engine and dashboard live, nothing has traded.** The engine, the risk gate, the kill switch and the ledger are built and covered by 43 tests; the Moomoo connector is verified against a live quote; the read-only Slack bot answers `status`; the dashboard is deployed at https://timon-theta.vercel.app. Not built yet: the competition account is unconfirmed, so the account guard blocks every proposal; Qoder Cloud Agents deployment, Slack approvals and the schedule are pending. No order has been placed.
 
 ---
 
@@ -146,6 +148,8 @@ With an empty `competition_account_id` in `config/account.yaml` every proposal c
 
 ## Dashboard
 
+Live at **https://timon-theta.vercel.app**.
+
 `dashboard/` is a static site: HTML, one CSS file, one ES module, and a hand-rolled SVG chart. No build step, no npm, no framework, no broker credentials in the browser. It reads one file, `dashboard/data.json`, which is generated from the repo:
 
 ```bash
@@ -158,14 +162,13 @@ The export needs `pyyaml`, which the project venv already has (the macOS system 
 
 The export computes the equity curve from closed-trade P&L in `logs/decisions.jsonl`, reads the kill-switch state and the current plan, and writes nothing back into `state/` or `logs/`. Empty ledger in, honest empty states out.
 
-Deploying is one command against a static directory. `vercel.json` points `outputDirectory` at `dashboard/` and marks `data.json` no-cache so a fresh export is never stale:
+Deploying is one command against a static directory. `vercel.json` sets `framework: null`, points `outputDirectory` at `dashboard/`, and marks `data.json` no-cache so a fresh export is never stale. `.vercelignore` keeps the Python tree and virtualenvs out of the upload.
 
 ```bash
-vercel login
 vercel --prod
 ```
 
-The refresh path is git: the executor commits a run, CI or a scheduled export regenerates `data.json`, Vercel redeploys. The page also carries a Refresh button for the local case.
+The project is linked to this GitHub repo, so a push that changes `dashboard/` redeploys automatically. The refresh path is git: the executor commits a run, the export regenerates `data.json`, Vercel redeploys. The page also carries a Refresh button for the local case.
 
 ## Layout
 
